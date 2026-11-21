@@ -5,13 +5,15 @@ Resume Story Engine is a portable preparation workflow for turning a résumé an
 ## What this repository contains
 
 ```text
-spec/       Required output shapes and field definitions
-prompts/    Small stage-specific prompts for any LLM adapter
-examples/   High-quality examples that teach the expected level of detail
-evals/      Quality checks and test cases
-data/       Safe demo output; keep personal preparation data private
-dashboard/  Read-only browser dashboard for preparation JSON
-scripts/    Validation and local preview helpers
+spec/                 Required output shapes and field definitions
+prompts/              Small stage-specific prompts for any LLM adapter
+examples/             Layout notes and expected detail level
+evals/                Quality checks and test cases
+data/                 Safe demo output; keep personal runs private
+dashboard/            Read-only browser dashboard for preparation JSON
+scripts/              Validation and local preview helpers
+.cursor/skills/       Cursor skill that runs the staged pipeline
+AGENTS.md             Short always-on agent gates for this repo
 ```
 
 ## The pipeline
@@ -21,24 +23,31 @@ Résumé + job description
         ↓
 Compact role summary
         ↓
-Compact résumé-point cards
+Point index (all bullets, compact)
         ↓
-Five to ten plausible situations per point
+For each point in order (automated):
+   load prior expanded points → expand this point → write file
         ↓
-Rank the strongest role-aligned situation
+Generate general interview answers
         ↓
-Expand product, workflow, technology, impact, and evidence
+Review, assemble preparation JSON, validate
         ↓
-Generate CTAR and general interview answers
-        ↓
-Run structural and quality evaluation
-        ↓
-Save as draft, reviewed, or finalized
+Optional: clear intermediate checkpoints
         ↓
 Render the preparation dashboard
 ```
 
-The compact cards are an index, not a replacement for the full story. Detailed facts remain in the preparation record and are loaded only when a point is expanded.
+Points are expanded **sequentially**. Each new point receives prior stories as context so the same company prep does not repeat the same product/use-case angle. Checkpoint files under `data/private/<run-slug>/` are the handoff between stages — see `examples/run-layout.md`.
+
+## Using Cursor (default runner)
+
+1. Open this repo in Cursor.
+2. In Agent chat, run `/resume-story` (or ask to prepare interview stories) and paste the résumé + job description.
+3. The skill writes stage files automatically and continues point-by-point without waiting for "next".
+4. When finished, open `data/private/<run-slug>/06-preparation.json`.
+5. Say `clear` to delete intermediates and keep inputs + final JSON.
+
+Point-level rewrite/edit is planned next; this pass focuses on full generate.
 
 ## Using another LLM
 
