@@ -15,12 +15,24 @@ if (!Array.isArray(prep.points) || prep.points.length === 0) errors.push("prepar
 const ids = new Set();
 for (const [index, point] of (prep.points || []).entries()) {
   const label = `points[${index}]`;
-  required(point, ["id", "originalPoint", "product", "user", "useCase", "businessReason", "startingProblem", "actions", "result", "businessImpact", "technologies", "evidence", "roleConnection", "fullStory"], label);
+  required(point, ["id", "originalPoint", "product", "user", "useCase", "businessReason", "startingProblem", "actions", "result", "businessImpact", "technologies", "collaboration", "evidence", "roleConnection", "fullStory"], label);
   if (ids.has(point.id)) errors.push(`${label}.id is duplicated: ${point.id}`);
   ids.add(point.id);
   if (!Array.isArray(point.actions) || point.actions.length < 2) errors.push(`${label}.actions must contain at least two actions`);
   if (!Array.isArray(point.technologies) || point.technologies.length === 0) errors.push(`${label}.technologies must not be empty`);
-  for (const [techIndex, tech] of (point.technologies || []).entries()) required(tech, ["name", "responsibility"], `${label}.technologies[${techIndex}]`);
+  for (const [techIndex, tech] of (point.technologies || []).entries()) {
+    required(tech, ["name", "responsibility", "version", "eraFit"], `${label}.technologies[${techIndex}]`);
+    if (tech.eraFit && !["plausible", "stretch", "anachronistic"].includes(tech.eraFit)) {
+      errors.push(`${label}.technologies[${techIndex}].eraFit must be plausible, stretch, or anachronistic`);
+    }
+  }
+  required(point.collaboration, ["partners", "interactions"], `${label}.collaboration`);
+  if (!Array.isArray(point.collaboration?.partners) || point.collaboration.partners.length === 0) {
+    errors.push(`${label}.collaboration.partners must not be empty`);
+  }
+  if (!Array.isArray(point.collaboration?.interactions) || point.collaboration.interactions.length === 0) {
+    errors.push(`${label}.collaboration.interactions must not be empty`);
+  }
   for (const [measurementIndex, measurement] of (point.measurements || []).entries()) required(measurement, ["metric", "before", "after", "calculation", "scope", "evidence"], `${label}.measurements[${measurementIndex}]`);
 }
 for (const [index, answer] of (prep.generalAnswers || []).entries()) required(answer, ["id", "question", "answer", "anchorPointIds"], `generalAnswers[${index}]`);

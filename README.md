@@ -23,10 +23,13 @@ Résumé + job description
         ↓
 Compact role summary
         ↓
+Tech / domain landscape research (web)
+  versions · gaps · architectures · Product/UX norms · 2024+ AI tools · timeline checks
+        ↓
 Point index (all bullets, compact)
         ↓
 For each point in order (automated):
-   load prior expanded points → expand this point → write file
+   load landscape + prior points → expand with versions, collab, AI hints → write file
         ↓
 Generate general interview answers
         ↓
@@ -37,7 +40,7 @@ Optional: clear intermediate checkpoints
 Render the preparation dashboard
 ```
 
-Points are expanded **sequentially**. Each new point receives prior stories as context so the same company prep does not repeat the same product/use-case angle. Checkpoint files under `data/private/<run-slug>/` are the handoff between stages — see `examples/run-layout.md`.
+Points are expanded **sequentially**. Each new point receives the landscape brief and prior stories so the same company prep stays specific, timeline-plausible, and non-repetitive. Checkpoint files under `data/private/<run-slug>/` are the handoff between stages — see `examples/run-layout.md`.
 
 ## Using Cursor (default runner)
 
