@@ -2,21 +2,41 @@
 
 Read one résumé point, the compact role summary, the tech landscape brief (`01b-tech-landscape.json`), company context, and any `priorPoints` already expanded for this same target role. Return only JSON matching `spec/resume-point.schema.json`.
 
-First generate five to ten plausible situations internally. Select the one that best matches the role’s product, users, workflows, and evaluation signals. The returned story must name the product, user, exact use case, business reason, starting problem, personally owned actions, result, business impact, technology responsibilities (with plausible `version` and `eraFit`), **system architecture** (components + request flow), collaboration with Product/UX/other partners, failure handling, role connection, and evidence.
+**Architecture belongs on this résumé point only** — never on general interview answers.
 
-## Architecture (required)
+## Highest priority: deep job-description match
 
-Fill `architecture` so an interviewer can follow the system:
+Be extremely specific about how **this** bullet maps to the target JD before polishing storytelling:
 
-- `components`: name each involved piece and its `layer` (`client`, `edge`, `backend`, `data`, `ai`, `integration`, `infra`, or `other`) and `role`.
-- `requestFlow`: ordered steps from user action / request through UI → backend/API → data store → any AI/service calls → response.
-- `aiPlacement`: where AI sits in that path when relevant (product AI feature and/or coding-assistant use in the build process — keep those distinct).
-- Keep it concrete for **this** point’s stack from the résumé/JD/landscape — not a generic template.
+1. Fill `jdAlignment` with concrete JD hooks (`responsibility`, `userWorkflow`, `businessProblem`, `evaluationSignal`, `technology`, or `interviewTheme`) quoting or paraphrasing the JD closely.
+2. Choose the situation that best mirrors the JD’s users, workflows, and evaluation signals — not the flashiest unrelated story.
+3. In `roleConnection`, name the exact JD responsibility/workflow this point rehearses. Vague “this shows ownership” is not enough.
+4. Prefer depth on one matched JD problem over shallow coverage of many.
 
-Ground technical choices in the landscape brief: use purpose, gaps, and architecture hooks so the story sounds like real practice (for example agent architectures when the point involves agents). Do not contradict `timelineChecks`; if a tool is anachronistic for the résumé window, choose a plausible alternative or mark `eraFit` as `stretch`/`anachronistic` with an `eraNote`.
+First generate five to ten plausible situations internally; rank by **JD match strength**, then expand the winner.
 
-Include `collaboration.partners` and concrete `interactions` (spec reviews, design critiques, demos, incident threads, customer feedback loops). When the experience window is 2024 or later, lightly weave AI coding-assistant use via `aiTooling` and a natural hint in `actions` or `fullStory` (drafting tests, exploring APIs, reviewing diffs) and how that work was shared with the team. Do not force AI tooling into pre-2024 windows.
+## Required story contents
 
-If `priorPoints` is present, do not reuse the same product narrative, primary metric story, or action framing. Differentiate user, workflow, failure path, collaboration angle, architecture emphasis, and role connection.
+Product, user, exact use case, business reason, starting problem, personally owned actions, result, business impact, technologies (named + relevant **adjacent** stack from the landscape), **point architecture** (components + request flow), collaboration, failure handling, evidence, and `jdAlignment`.
 
-If a number appears, include its before value, after value, formula, comparison scope, and evidence source. If the point has no defensible number, use task-completion or workflow evidence instead of inventing a percentage. Keep the selected story internally consistent and do not expose rejected possibilities unless the application explicitly requests them.
+## Architecture (this point only)
+
+Fill `architecture` so an interviewer can follow **this** system:
+
+- `components` with `layer` + `role` (client / backend / data / ai / integration / infra / …)
+- `requestFlow`: ordered path such as UI → API → datastore → AI/service → response
+- `aiPlacement`: product AI in the path vs coding-assistant use while building (keep distinct)
+- Include adjacent pieces that make the path real (auth, cache, queue, observability) when the landscape supports them
+
+## Technologies
+
+- Include primary tools from the résumé/JD **and** small surrounding tools from `adjacentTechnologies` when they honestly appear in the request flow or build/ship path.
+- Every entry needs `version` + `eraFit` consistent with `timelineChecks` / the experience window.
+
+## Collaboration and AI tooling
+
+Include Product/UX/partner interactions. For 2024+ windows, lightly mention coding assistants via `aiTooling`; never force them into pre-2024 windows.
+
+## Anti-repeat
+
+If `priorPoints` exist, differentiate product angle, workflow, failure path, collaboration, architecture emphasis, and which JD hooks you cover.

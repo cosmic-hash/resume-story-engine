@@ -5,11 +5,11 @@ This repository is the source of truth for the workflow; an adapter is the thin 
 ## Request sequence (point-wise)
 
 1. Read `spec/role-summary.schema.json` and `prompts/extract-role.md`; produce one compact role summary. Persist as `01-role-summary.json`.
-2. Research the landscape with `prompts/research-tech-landscape.md` + live web sources → `01b-tech-landscape.json` (`spec/tech-landscape.schema.json`). Include framework purpose/gaps, versions-by-era, domain architectures, Product/UX collaboration norms, post-2024 AI coding-tool norms, and résumé timeline checks.
+2. Research the landscape with `prompts/research-tech-landscape.md` + live web sources → `01b-tech-landscape.json` (`spec/tech-landscape.schema.json`). Include named frameworks **and adjacent supporting tools**, versions-by-era, domain architectures, Product/UX norms, post-2024 AI coding-tool norms, and résumé timeline checks.
 3. Produce an ordered point index (`02-point-index.json`). Keep the original wording unchanged in `originalPoint`.
 4. **For each point in order**:
    - Load `roleSummary`, `techLandscape`, the current card, and all previously written expanded points as `priorPoints`.
-   - Run `prompts/expand-point.md` → write `03-points/<id>.json` with versions, architecture (components + request flow), collaboration, and AI tooling when applicable.
+   - Run `prompts/expand-point.md` → write `03-points/<id>.json` with deep `jdAlignment`, versions, adjacent supporting tech, point-only architecture (components + request flow), collaboration, and AI tooling when applicable.
    - Continue to the next point automatically.
 5. After all points exist, run `prompts/generate-answer.md` against `evals/general-questions.json` for the full general/STAR bank (`04-answers.json`), including a ~60s intro and distinct modern general answers.
 6. Run `prompts/review-answer.md`, repair only failed fields, assemble `06-preparation.json` (include `techLandscape`), then validate.

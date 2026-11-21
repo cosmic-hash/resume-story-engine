@@ -68,7 +68,8 @@ Copy and update `_progress.json` after each stage.
 
 ### Stage 3 — Tech landscape research (required)
 - Read `prompts/research-tech-landscape.md` + `spec/tech-landscape.schema.json`.
-- Use web search / live docs for frameworks, versions-by-era, domain architectures, Product/UX collaboration norms, and **post-2024 AI coding tools** (Claude, Cursor, Copilot, etc.).
+- Use web search / live docs for **named** JD/résumé frameworks and **adjacent supporting tools** around them (auth, CI, testing, caching, queues, observability, etc. as relevant).
+- Also capture versions-by-era, domain architectures, Product/UX norms, and **post-2024 AI coding tools**.
 - Cross-check résumé employment windows in `timelineChecks`.
 - Write `01b-tech-landscape.json`.
 
@@ -80,14 +81,15 @@ Copy and update `_progress.json` after each stage.
 For each card in order:
 1. Read `01-role-summary.json`, `01b-tech-landscape.json`, the card, and **all** existing `03-points/*.json`.
 2. Read `prompts/expand-point.md` + `spec/resume-point.schema.json`.
-3. Expand this point only: versions + `eraFit`, **architecture** (components + request flow), collaboration, domain hooks, and light `aiTooling` when the window is 2024+.
+3. Expand this point only with **deep JD match first** (`jdAlignment`), then versions + adjacent supporting tech, **point architecture** (components + request flow — points only), collaboration, and light `aiTooling` when the window is 2024+.
 4. Write `03-points/<id>.json` with `"status": "draft"`.
 5. Update `_progress.json` (`lastCompletedPointId`, `nextPointId`).
 6. Continue to the next point immediately — do not ask the user to click next.
 
-### Stage 6 — Answers
+### Stage 6 — Answers (separate from point architecture)
 - Read `prompts/generate-answer.md` and `evals/general-questions.json`.
 - Write `04-answers.json` covering **every** required bank question.
+- Do **not** put architecture objects on general answers.
 - `intro` ≈ 60 seconds, standard shape. Distinct angles for intro / why-company / AI workflow / ask-for-help. STAR items may reuse points; include `ctar` when required.
 
 ### Stage 7 — Review + assemble + validate

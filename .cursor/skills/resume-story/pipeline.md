@@ -9,6 +9,7 @@ Full object matching `spec/tech-landscape.schema.json`.
 Must include:
 
 - technologies with purpose, gaps, architectures, `typicalVersionsByEra`, sources
+- `adjacentTechnologies` supporting the named stack (why needed, where it shows up)
 - domainPatterns with story hooks
 - collaborationNorms (Product, UX, etc.)
 - aiAssistedWork from 2024+ (tools, sharing norms, mention guidance)
@@ -32,8 +33,9 @@ Must include:
 
 Full object matching `spec/resume-point.schema.json`, including:
 
-- `technologies[].version` and `eraFit`
-- `architecture.summary`, `components[]`, `requestFlow[]` (UI → backend → data → AI when relevant)
+- `jdAlignment` with at least two concrete JD hooks (deep match — highest priority)
+- `technologies[]` including relevant adjacent/supporting tools, each with `version` and `eraFit`
+- `architecture` on the **point only**: `summary`, `components[]`, `requestFlow[]`
 - `collaboration.partners` / `interactions`
 - `aiTooling` when the window is 2024+ (or `applicable: false` with reason in `howUsed`)
 

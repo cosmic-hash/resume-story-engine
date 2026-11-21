@@ -17,7 +17,7 @@ const ids = new Set();
 const architectureLayers = new Set(["client", "edge", "backend", "data", "ai", "integration", "infra", "other"]);
 for (const [index, point] of (prep.points || []).entries()) {
   const label = `points[${index}]`;
-  required(point, ["id", "originalPoint", "product", "user", "useCase", "businessReason", "startingProblem", "actions", "result", "businessImpact", "technologies", "architecture", "collaboration", "evidence", "roleConnection", "fullStory"], label);
+  required(point, ["id", "originalPoint", "product", "user", "useCase", "businessReason", "startingProblem", "actions", "result", "businessImpact", "technologies", "architecture", "jdAlignment", "collaboration", "evidence", "roleConnection", "fullStory"], label);
   if (ids.has(point.id)) errors.push(`${label}.id is duplicated: ${point.id}`);
   ids.add(point.id);
   if (!Array.isArray(point.actions) || point.actions.length < 2) errors.push(`${label}.actions must contain at least two actions`);
@@ -40,6 +40,17 @@ for (const [index, point] of (prep.points || []).entries()) {
   }
   if (!Array.isArray(point.architecture?.requestFlow) || point.architecture.requestFlow.length < 2) {
     errors.push(`${label}.architecture.requestFlow must contain at least two steps`);
+  }
+  required(point.jdAlignment, ["matchSummary", "hooks"], `${label}.jdAlignment`);
+  if (!Array.isArray(point.jdAlignment?.hooks) || point.jdAlignment.hooks.length < 2) {
+    errors.push(`${label}.jdAlignment.hooks must contain at least two JD hooks`);
+  }
+  const jdAreas = new Set(["responsibility", "userWorkflow", "businessProblem", "evaluationSignal", "technology", "interviewTheme"]);
+  for (const [hookIndex, hook] of (point.jdAlignment?.hooks || []).entries()) {
+    required(hook, ["jdArea", "jdText", "howThisPointMatches"], `${label}.jdAlignment.hooks[${hookIndex}]`);
+    if (hook.jdArea && !jdAreas.has(hook.jdArea)) {
+      errors.push(`${label}.jdAlignment.hooks[${hookIndex}].jdArea is invalid`);
+    }
   }
   required(point.collaboration, ["partners", "interactions"], `${label}.collaboration`);
   if (!Array.isArray(point.collaboration?.partners) || point.collaboration.partners.length === 0) {

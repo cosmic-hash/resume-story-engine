@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "resume-point.schema.json",
   "type": "object",
-  "required": ["id", "originalPoint", "product", "user", "useCase", "businessReason", "startingProblem", "actions", "result", "businessImpact", "technologies", "architecture", "collaboration", "evidence", "roleConnection", "fullStory"],
+  "required": ["id", "originalPoint", "product", "user", "useCase", "businessReason", "startingProblem", "actions", "result", "businessImpact", "technologies", "architecture", "jdAlignment", "collaboration", "evidence", "roleConnection", "fullStory"],
   "properties": {
     "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
     "originalPoint": { "type": "string", "minLength": 10 },
@@ -23,6 +23,26 @@
     "workflowSteps": { "type": "array", "items": { "type": "string" } },
     "result": { "type": "string", "minLength": 10 },
     "businessImpact": { "type": "string", "minLength": 10 },
+    "jdAlignment": {
+      "type": "object",
+      "required": ["matchSummary", "hooks"],
+      "properties": {
+        "matchSummary": { "type": "string", "minLength": 20 },
+        "hooks": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["jdArea", "jdText", "howThisPointMatches"],
+            "properties": {
+              "jdArea": { "enum": ["responsibility", "userWorkflow", "businessProblem", "evaluationSignal", "technology", "interviewTheme"] },
+              "jdText": { "type": "string", "minLength": 5 },
+              "howThisPointMatches": { "type": "string", "minLength": 10 }
+            }
+          }
+        }
+      }
+    },
     "architecture": {
       "type": "object",
       "required": ["summary", "components", "requestFlow"],

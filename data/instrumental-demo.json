@@ -39,6 +39,32 @@
         "sources": ["TypeScript handbook"]
       }
     ],
+    "adjacentTechnologies": [
+      {
+        "name": "Vite",
+        "supports": ["React", "TypeScript"],
+        "whyNeeded": "Local dev server and production bundling for the SPA.",
+        "whereItShowsUp": "Build and hot-reload path while iterating on summary and detail views.",
+        "typicalVersionsByEra": [{ "era": "2024-2025", "versions": "5.x", "notes": "Common SPA bundler alongside React 18." }],
+        "sources": ["Vite guide"]
+      },
+      {
+        "name": "React Testing Library",
+        "supports": ["React"],
+        "whyNeeded": "Assert user-visible investigation flows and failure states.",
+        "whereItShowsUp": "Regression checks for stale, empty, and category drill-down paths.",
+        "typicalVersionsByEra": [{ "era": "2024-2025", "versions": "14.x–16.x", "notes": "Standard DOM Testing Library stack for React SPAs." }],
+        "sources": ["Testing Library docs"]
+      },
+      {
+        "name": "HTTP API client / fetch layer",
+        "supports": ["React", "TypeScript"],
+        "whyNeeded": "Typed calls to summary and transaction endpoints with abort/stale handling.",
+        "whereItShowsUp": "Client request path between UI states and backend APIs.",
+        "typicalVersionsByEra": [{ "era": "2024-2025", "versions": "fetch / axios 1.x", "notes": "Either is plausible; demo uses a thin fetch wrapper." }],
+        "sources": ["MDN fetch"]
+      }
+    ],
     "domainPatterns": [
       {
         "topic": "Evidence-first investigation UI",
@@ -89,25 +115,49 @@
         { "name": "React", "responsibility": "Composed the dashboard, summary, category, and detail states.", "version": "18", "eraFit": "plausible", "eraNote": "React 18 SPA patterns fit a 2024–2025 product window." },
         { "name": "TypeScript", "responsibility": "Defined the data and UI-state contracts.", "version": "5.x", "eraFit": "plausible" },
         { "name": "React Router", "responsibility": "Preserved account, period, category, and return state.", "version": "6.x", "eraFit": "plausible" },
-        { "name": "SCSS modules", "responsibility": "Implemented scoped responsive layout and accessible visual states.", "version": "Dart Sass modern", "eraFit": "plausible" }
+        { "name": "SCSS modules", "responsibility": "Implemented scoped responsive layout and accessible visual states.", "version": "Dart Sass modern", "eraFit": "plausible" },
+        { "name": "Vite", "responsibility": "Bundled and hot-reloaded the SPA while iterating responsive states.", "version": "5.x", "eraFit": "plausible" },
+        { "name": "React Testing Library", "responsibility": "Locked the summary-to-source and failure-state paths in regression tests.", "version": "14.x", "eraFit": "plausible" },
+        { "name": "fetch client wrapper", "responsibility": "Issued summary/detail requests and ignored stale responses after filter changes.", "version": "browser fetch", "eraFit": "plausible" }
       ],
       "architecture": {
         "summary": "Browser SPA calls a summary API, then a transactions API, with route state preserving account and period while the UI renders evidence.",
         "components": [
           { "name": "WalletGyde web app", "layer": "client", "role": "Renders period controls, summary cards, category breakdown, and transaction evidence." },
+          { "name": "fetch client wrapper", "layer": "client", "role": "Performs typed HTTP calls and drops stale generations." },
           { "name": "Summary API", "layer": "backend", "role": "Returns income/spend aggregates for the selected account and month." },
           { "name": "Transactions API", "layer": "backend", "role": "Returns source rows for a selected category." },
           { "name": "Financial datastore", "layer": "data", "role": "Stores ledger-backed transaction and category totals." }
         ],
         "requestFlow": [
           "User selects account and month in the UI",
-          "Client requests summary for that period",
+          "Client fetch wrapper requests summary for that period",
           "Backend reads aggregates from the datastore and returns summary cards",
           "User opens a category; client requests transaction evidence",
           "Backend returns source rows; UI keeps period context via router state"
         ],
         "aiPlacement": "No product AI in the request path. Cursor/Claude assisted test and layout exploration during development only.",
-        "diagramNotes": "SPA → summary API → datastore; SPA → transactions API → datastore; router preserves return context."
+        "diagramNotes": "SPA → fetch wrapper → summary/transactions APIs → datastore; router preserves return context."
+      },
+      "jdAlignment": {
+        "matchSummary": "Maps WalletGyde’s summary-to-source investigation UI onto Instrumental’s evidence-first manufacturing workflows and Product partnership expectations.",
+        "hooks": [
+          {
+            "jdArea": "userWorkflow",
+            "jdText": "Inspect images, measurements, and functional tests / investigate anomalies and root causes",
+            "howThisPointMatches": "Same investigation pattern: move from a filtered summary population to verifiable source evidence without losing context."
+          },
+          {
+            "jdArea": "responsibility",
+            "jdText": "Own features from user discovery through production validation; partner with Product and Customer Success",
+            "howThisPointMatches": "Discovery with Product/UX, Support validation, and shipped failure states through production-ready responsive checks."
+          },
+          {
+            "jdArea": "evaluationSignal",
+            "jdText": "Thoughtful artificial-intelligence use; clear risk communication; production quality",
+            "howThisPointMatches": "AI assistants used only in the build path with PR disclosure; stale/partial failures communicated as explicit UI states."
+          }
+        ]
       },
       "collaboration": {
         "partners": ["Product", "UX", "Customer Support"],
@@ -230,12 +280,14 @@
     "status": "needs-review",
     "checks": [
       { "id": "structure", "status": "pass", "detail": "Required role, landscape, point, answer, and evaluation fields are present." },
-      { "id": "architecture", "status": "pass", "detail": "Client, APIs, datastore, and request flow are named for the point." },
+      { "id": "architecture", "status": "pass", "detail": "Point-level client, APIs, datastore, and request flow are named." },
+      { "id": "jd-match-depth", "status": "pass", "detail": "jdAlignment hooks map to Instrumental workflows, ownership, and evaluation signals." },
+      { "id": "adjacent-tech", "status": "pass", "detail": "Vite, Testing Library, and fetch wrapper support the React path." },
       { "id": "version-era-fit", "status": "pass", "detail": "Named React 18 / TypeScript 5.x versions fit the 2024–2025 window." },
       { "id": "collaboration", "status": "pass", "detail": "Product, UX, and Support interactions are named." },
       { "id": "ai-tooling-norm", "status": "pass", "detail": "Cursor and Claude are mentioned lightly for a 2024+ window." },
       { "id": "general-bank-coverage", "status": "pass", "detail": "All required general-question bank ids are present." },
-      { "id": "intro-length", "status": "pass", "detail": "Intro is a ~60s standard spoken shape." },
+      { "id": "intro-length", "status": "pass", "detail": "Intro is a ~60s standard spoken shape without an architecture dump." },
       { "id": "candidate-confirmation", "status": "review", "detail": "Confirm the measurement evidence and final wording before rehearsal." }
     ]
   }
