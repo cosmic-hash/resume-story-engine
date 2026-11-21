@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "role-summary.schema.json",
+  "type": "object",
+  "required": ["company", "role", "requiredTechnologies", "userWorkflows", "evaluationSignals", "interviewThemes"],
+  "properties": {
+    "company": { "type": "string", "minLength": 1 },
+    "role": { "type": "string", "minLength": 1 },
+    "location": { "type": "string" },
+    "requiredTechnologies": { "type": "array", "items": { "type": "string" } },
+    "responsibilities": { "type": "array", "items": { "type": "string" } },
+    "userWorkflows": { "type": "array", "items": { "type": "string" } },
+    "businessProblems": { "type": "array", "items": { "type": "string" } },
+    "evaluationSignals": { "type": "array", "items": { "type": "string" } },
+    "interviewThemes": { "type": "array", "items": { "type": "string" } }
+  }
+}

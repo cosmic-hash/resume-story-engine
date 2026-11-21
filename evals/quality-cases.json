@@ -1,0 +1,15 @@
+{
+  "checks": [
+    { "id": "product", "rule": "Names the product or feature and what it was used for." },
+    { "id": "user", "rule": "Names the user role and the concrete task they were completing." },
+    { "id": "workflow", "rule": "Traces input, processing, storage or integration, and user-visible result." },
+    { "id": "ownership", "rule": "Separates the candidate's actions from team or system behavior." },
+    { "id": "technology-responsibility", "rule": "Explains what each named technology did." },
+    { "id": "impact", "rule": "Separates technical result from business or user impact." },
+    { "id": "measurement", "rule": "Every numeric claim has before, after, formula, scope, and evidence." },
+    { "id": "failure-recovery", "rule": "Names at least one failure path and the remedy or prevention when relevant." },
+    { "id": "role-alignment", "rule": "Connects the experience to a specific responsibility in the target role." },
+    { "id": "specificity", "rule": "Avoids unexplained generic claims such as scalable, optimized, robust, or enterprise." }
+  ],
+  "acceptance": "A preparation can be finalized only when structural validation passes and no quality check is marked fail. Review items may remain for candidate confirmation."
+}

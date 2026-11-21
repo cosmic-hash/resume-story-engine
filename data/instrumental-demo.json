@@ -1,0 +1,54 @@
+{
+  "version": "0.1.0",
+  "roleSummary": {
+    "company": "Instrumental",
+    "role": "Front End Product Engineer",
+    "location": "Bay Area",
+    "requiredTechnologies": ["TypeScript", "React", "React Router", "HTML", "SCSS"],
+    "responsibilities": ["Own features from user discovery through production validation", "Partner with Product and Customer Success", "Build evidence-rich application workflows", "Investigate performance and reliability issues"],
+    "userWorkflows": ["Search a serialized unit", "Inspect images, measurements, and functional tests", "Investigate anomalies and root causes", "Monitor known production controls"],
+    "businessProblems": ["Manufacturing engineers need faster failure analysis", "Factory signals are distributed across systems", "A production decision needs traceable evidence"],
+    "evaluationSignals": ["User curiosity", "End-to-end ownership", "Clear risk communication", "Production quality", "Thoughtful artificial-intelligence use"],
+    "interviewThemes": ["Specific product stories", "Data-heavy React interfaces", "Customer feedback", "Failure states", "Measurement discipline"]
+  },
+  "points": [
+    {
+      "id": "walletgyde-dashboard",
+      "originalPoint": "Designed responsive dashboard layouts in React and TypeScript with SCSS modules, translating complex financial summaries into accessible visual components for end users.",
+      "product": "WalletGyde monthly financial overview with summary cards, category breakdowns, and transaction evidence.",
+      "user": "An account owner investigating a monthly financial result on a laptop or phone.",
+      "useCase": "The user selects a month, compares income and spending, opens a category, and reviews the transactions behind the total without losing the selected period.",
+      "businessReason": "A summary is only useful when the user can understand and verify the number quickly.",
+      "startingProblem": "Dense summaries could hide units, periods, source rows, and failure states on smaller screens.",
+      "actions": ["Defined the hierarchy from period control to summary, category, and transaction evidence.", "Built typed React states for loading, stale, empty, error, and populated data.", "Used React Router and SCSS modules to preserve context and reflow the interface responsively."],
+      "workflowSteps": ["Select account and period", "Load summary", "Open category", "Inspect transaction evidence", "Return without losing context"],
+      "result": "The workflow remained readable from mobile through desktop and kept a clear summary-to-source path.",
+      "businessImpact": "Users could investigate a surprising value without switching tools or asking support to explain it.",
+      "technologies": [
+        { "name": "React", "responsibility": "Composed the dashboard, summary, category, and detail states." },
+        { "name": "TypeScript", "responsibility": "Defined the data and UI-state contracts." },
+        { "name": "React Router", "responsibility": "Preserved account, period, category, and return state." },
+        { "name": "SCSS modules", "responsibility": "Implemented scoped responsive layout and accessible visual states." }
+      ],
+      "measurements": [{ "metric": "Responsive task completion", "before": "Dense layout without a stable summary-to-source hierarchy", "after": "One responsive workflow across 375px, 768px, and desktop layouts", "calculation": "Compare completion, wrong turns, context resets, and time for the same investigation task", "scope": "Fixed seeded account and month", "evidence": "Browser recordings, accessibility checks, and task walkthrough results" }],
+      "evidence": ["Demonstrate 375px, 768px, and desktop layouts.", "Verify keyboard traversal, long labels, stale data, empty data, and retry states."],
+      "failureCases": ["Stale response arrives after a newer filter", "No transactions exist for the selected period", "Summary loads but detail request fails"],
+      "remedy": "Keep summary and detail states independent and preserve the last valid route context.",
+      "prevention": "Add browser checks for filter changes, back navigation, loading, empty, stale, and partial-failure states.",
+      "roleConnection": "Instrumental users similarly move from a filtered population to unit-level image, measurement, and test evidence.",
+      "interviewerQuestions": ["How did you preserve route state?", "What did each technology own?", "How would this pattern apply to a serialized-unit investigation?"],
+      "fullStory": "WalletGyde users needed to investigate a financial summary rather than merely view a number. I designed the responsive hierarchy, modeled the states, preserved the selected context, and connected summary data to source transactions. The result was a traceable, accessible workflow. The transferable Instrumental pattern is an evidence-first investigation interface where filters, loading states, detail views, and source context remain correct.",
+      "status": "needs-review"
+    }
+  ],
+  "generalAnswers": [
+    { "id": "intro", "question": "Tell me about yourself", "answer": "I am a product-minded software engineer focused on turning complex data into interfaces people can use and verify. My closest example is WalletGyde's responsive summary-to-transaction workflow, and I am interested in Instrumental because its frontend is the engineering workspace for manufacturing evidence.", "anchorPointIds": ["walletgyde-dashboard"] }
+  ],
+  "evaluation": {
+    "status": "needs-review",
+    "checks": [
+      { "id": "structure", "status": "pass", "detail": "Required role, point, answer, and evaluation fields are present." },
+      { "id": "candidate-confirmation", "status": "review", "detail": "Confirm the measurement evidence and final wording before rehearsal." }
+    ]
+  }
+}

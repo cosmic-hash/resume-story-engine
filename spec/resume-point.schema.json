@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "resume-point.schema.json",
+  "type": "object",
+  "required": ["id", "originalPoint", "product", "user", "useCase", "businessReason", "startingProblem", "actions", "result", "businessImpact", "technologies", "evidence", "roleConnection", "fullStory"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "originalPoint": { "type": "string", "minLength": 10 },
+    "product": { "type": "string", "minLength": 10 },
+    "user": { "type": "string", "minLength": 10 },
+    "useCase": { "type": "string", "minLength": 10 },
+    "businessReason": { "type": "string", "minLength": 10 },
+    "startingProblem": { "type": "string", "minLength": 10 },
+    "actions": { "type": "array", "minItems": 2, "items": { "type": "string", "minLength": 10 } },
+    "workflowSteps": { "type": "array", "items": { "type": "string" } },
+    "result": { "type": "string", "minLength": 10 },
+    "businessImpact": { "type": "string", "minLength": 10 },
+    "technologies": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["name", "responsibility"], "properties": { "name": { "type": "string" }, "responsibility": { "type": "string" } } } },
+    "measurements": { "type": "array", "items": { "type": "object", "required": ["metric", "before", "after", "calculation", "scope", "evidence"], "properties": { "metric": { "type": "string" }, "before": { "type": "string" }, "after": { "type": "string" }, "calculation": { "type": "string" }, "scope": { "type": "string" }, "evidence": { "type": "string" } } } },
+    "evidence": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 10 } },
+    "failureCases": { "type": "array", "items": { "type": "string" } },
+    "remedy": { "type": "string" },
+    "prevention": { "type": "string" },
+    "roleConnection": { "type": "string", "minLength": 10 },
+    "interviewerQuestions": { "type": "array", "items": { "type": "string" } },
+    "fullStory": { "type": "string", "minLength": 50 },
+    "status": { "enum": ["draft", "needs-review", "shortlisted", "finalized"] }
+  }
+}

@@ -1,0 +1,13 @@
+node_modules/
+.env
+.env.*
+!.env.example
+data/private/
+uploads/
+*.pdf
+*.docx
+*.txt
+!prompts/*.txt
+!data/*.json
+dist/
+.DS_Store

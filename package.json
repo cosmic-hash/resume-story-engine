@@ -1,0 +1,12 @@
+{
+  "name": "resume-story-engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A portable, evidence-first interview preparation workflow and dashboard contract.",
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate.mjs",
+    "dashboard": "node scripts/serve.mjs",
+    "check": "npm run validate"
+  }
+}
