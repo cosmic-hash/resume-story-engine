@@ -29,9 +29,9 @@ Tech / domain landscape research (web)
 Point index (all bullets, compact)
         ↓
 For each point in order (automated):
-   load landscape + prior points → expand with versions, collab, AI hints → write file
+   load landscape + prior points → expand with versions, architecture, collab, AI hints → write file
         ↓
-Generate general interview answers
+Generate general + STAR bank answers (~60s intro; modern AI / teamwork questions)
         ↓
 Review, assemble preparation JSON, validate
         ↓

@@ -80,14 +80,15 @@ Copy and update `_progress.json` after each stage.
 For each card in order:
 1. Read `01-role-summary.json`, `01b-tech-landscape.json`, the card, and **all** existing `03-points/*.json`.
 2. Read `prompts/expand-point.md` + `spec/resume-point.schema.json`.
-3. Expand this point only: versions + `eraFit`, collaboration, domain hooks, and light `aiTooling` when the window is 2024+.
+3. Expand this point only: versions + `eraFit`, **architecture** (components + request flow), collaboration, domain hooks, and light `aiTooling` when the window is 2024+.
 4. Write `03-points/<id>.json` with `"status": "draft"`.
 5. Update `_progress.json` (`lastCompletedPointId`, `nextPointId`).
 6. Continue to the next point immediately — do not ask the user to click next.
 
 ### Stage 6 — Answers
-- Read `prompts/generate-answer.md`.
-- Using role summary + landscape + all expanded points, write `04-answers.json`. Prefer 2–3 strongest points as anchors; do not rehash the same story twice across answers.
+- Read `prompts/generate-answer.md` and `evals/general-questions.json`.
+- Write `04-answers.json` covering **every** required bank question.
+- `intro` ≈ 60 seconds, standard shape. Distinct angles for intro / why-company / AI workflow / ask-for-help. STAR items may reuse points; include `ctar` when required.
 
 ### Stage 7 — Review + assemble + validate
 - Read `prompts/review-answer.md` and `evals/quality-cases.json`.

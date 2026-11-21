@@ -1,0 +1,75 @@
+{
+  "guidelines": {
+    "introTargetSeconds": 60,
+    "introStyle": "Standard spoken intro: present focus → 1–2 experience anchors from the résumé → why this company/role. Keep it simple; do not cram every bullet.",
+    "reuse": "Behavioral STAR answers may reuse the same expanded point when it fits. Very general answers (intro, AI workflow, asking for help / admitting mistakes) should each have a distinct angle even if they share an anchorPointId.",
+    "starNote": "Use Context–Task–Action–Result for behavioral stories. Not every bank item needs a unique product story."
+  },
+  "required": [
+    {
+      "id": "intro",
+      "question": "Tell me about yourself",
+      "category": "intro",
+      "targetSeconds": 60,
+      "mustBeDistinct": true,
+      "format": "spoken-intro"
+    },
+    {
+      "id": "why-company",
+      "question": "Why this company / why this role?",
+      "category": "general",
+      "targetSeconds": 45,
+      "mustBeDistinct": true,
+      "format": "spoken"
+    },
+    {
+      "id": "ai-workflow",
+      "question": "How are you incorporating AI into your current workflow?",
+      "category": "general-modern",
+      "targetSeconds": 60,
+      "mustBeDistinct": true,
+      "format": "spoken",
+      "eraNote": "Emphasize for candidates with 2024+ experience; otherwise answer honestly about limited or no use."
+    },
+    {
+      "id": "ask-for-help",
+      "question": "When do you ask teammates for suggestions, and how do you communicate when you made a mistake?",
+      "category": "general",
+      "targetSeconds": 60,
+      "mustBeDistinct": true,
+      "format": "ctar-or-spoken"
+    },
+    {
+      "id": "conflict-or-disagreement",
+      "question": "Tell me about a time you disagreed with a teammate or stakeholder.",
+      "category": "star",
+      "targetSeconds": 90,
+      "mustBeDistinct": false,
+      "format": "ctar"
+    },
+    {
+      "id": "failure",
+      "question": "Tell me about a time something went wrong and how you handled it.",
+      "category": "star",
+      "targetSeconds": 90,
+      "mustBeDistinct": false,
+      "format": "ctar"
+    },
+    {
+      "id": "impactful-project",
+      "question": "Tell me about a project you are proud of.",
+      "category": "star",
+      "targetSeconds": 90,
+      "mustBeDistinct": false,
+      "format": "ctar"
+    },
+    {
+      "id": "ambiguous-problem",
+      "question": "Tell me about a time you had to solve an ambiguous problem.",
+      "category": "star",
+      "targetSeconds": 90,
+      "mustBeDistinct": false,
+      "format": "ctar"
+    }
+  ]
+}

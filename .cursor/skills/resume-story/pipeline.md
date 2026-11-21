@@ -33,6 +33,7 @@ Must include:
 Full object matching `spec/resume-point.schema.json`, including:
 
 - `technologies[].version` and `eraFit`
+- `architecture.summary`, `components[]`, `requestFlow[]` (UI → backend → data → AI when relevant)
 - `collaboration.partners` / `interactions`
 - `aiTooling` when the window is 2024+ (or `applicable: false` with reason in `howUsed`)
 
@@ -46,12 +47,16 @@ priorPoints: [{ id, product, useCase, result }]
 
 ## 04-answers.json
 
+Must include every `required[].id` from `evals/general-questions.json`.
+
 ```json
 {
   "generalAnswers": [
     {
       "id": "intro",
       "question": "Tell me about yourself",
+      "category": "intro",
+      "targetSeconds": 60,
       "answer": "…",
       "anchorPointIds": ["walletgyde-dashboard"]
     }

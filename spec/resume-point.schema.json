@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "resume-point.schema.json",
   "type": "object",
-  "required": ["id", "originalPoint", "product", "user", "useCase", "businessReason", "startingProblem", "actions", "result", "businessImpact", "technologies", "collaboration", "evidence", "roleConnection", "fullStory"],
+  "required": ["id", "originalPoint", "product", "user", "useCase", "businessReason", "startingProblem", "actions", "result", "businessImpact", "technologies", "architecture", "collaboration", "evidence", "roleConnection", "fullStory"],
   "properties": {
     "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
     "originalPoint": { "type": "string", "minLength": 10 },
@@ -23,6 +23,29 @@
     "workflowSteps": { "type": "array", "items": { "type": "string" } },
     "result": { "type": "string", "minLength": 10 },
     "businessImpact": { "type": "string", "minLength": 10 },
+    "architecture": {
+      "type": "object",
+      "required": ["summary", "components", "requestFlow"],
+      "properties": {
+        "summary": { "type": "string", "minLength": 10 },
+        "components": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["name", "layer", "role"],
+            "properties": {
+              "name": { "type": "string" },
+              "layer": { "enum": ["client", "edge", "backend", "data", "ai", "integration", "infra", "other"] },
+              "role": { "type": "string", "minLength": 5 }
+            }
+          }
+        },
+        "requestFlow": { "type": "array", "minItems": 2, "items": { "type": "string", "minLength": 5 } },
+        "aiPlacement": { "type": "string" },
+        "diagramNotes": { "type": "string" }
+      }
+    },
     "technologies": {
       "type": "array",
       "minItems": 1,

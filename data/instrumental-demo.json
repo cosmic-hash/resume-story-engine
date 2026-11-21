@@ -91,6 +91,24 @@
         { "name": "React Router", "responsibility": "Preserved account, period, category, and return state.", "version": "6.x", "eraFit": "plausible" },
         { "name": "SCSS modules", "responsibility": "Implemented scoped responsive layout and accessible visual states.", "version": "Dart Sass modern", "eraFit": "plausible" }
       ],
+      "architecture": {
+        "summary": "Browser SPA calls a summary API, then a transactions API, with route state preserving account and period while the UI renders evidence.",
+        "components": [
+          { "name": "WalletGyde web app", "layer": "client", "role": "Renders period controls, summary cards, category breakdown, and transaction evidence." },
+          { "name": "Summary API", "layer": "backend", "role": "Returns income/spend aggregates for the selected account and month." },
+          { "name": "Transactions API", "layer": "backend", "role": "Returns source rows for a selected category." },
+          { "name": "Financial datastore", "layer": "data", "role": "Stores ledger-backed transaction and category totals." }
+        ],
+        "requestFlow": [
+          "User selects account and month in the UI",
+          "Client requests summary for that period",
+          "Backend reads aggregates from the datastore and returns summary cards",
+          "User opens a category; client requests transaction evidence",
+          "Backend returns source rows; UI keeps period context via router state"
+        ],
+        "aiPlacement": "No product AI in the request path. Cursor/Claude assisted test and layout exploration during development only.",
+        "diagramNotes": "SPA → summary API → datastore; SPA → transactions API → datastore; router preserves return context."
+      },
       "collaboration": {
         "partners": ["Product", "UX", "Customer Support"],
         "interactions": [
@@ -119,15 +137,105 @@
     }
   ],
   "generalAnswers": [
-    { "id": "intro", "question": "Tell me about yourself", "answer": "I am a product-minded software engineer focused on turning complex data into interfaces people can use and verify. My closest example is WalletGyde's responsive summary-to-transaction workflow, built with Product and UX and modern React/TypeScript practices, and I am interested in Instrumental because its frontend is the engineering workspace for manufacturing evidence.", "anchorPointIds": ["walletgyde-dashboard"] }
+    {
+      "id": "intro",
+      "question": "Tell me about yourself",
+      "category": "intro",
+      "targetSeconds": 60,
+      "answer": "I am a product-minded frontend engineer who turns dense operational data into interfaces people can finish a task in. Most recently I owned WalletGyde’s monthly summary-to-transaction workflow in React and TypeScript with Product and UX. I like evidence-first product work, and Instrumental’s manufacturing investigation UI is exactly that kind of problem.",
+      "anchorPointIds": ["walletgyde-dashboard"]
+    },
+    {
+      "id": "why-company",
+      "question": "Why this company / why this role?",
+      "category": "general",
+      "targetSeconds": 45,
+      "answer": "Instrumental sits where frontend work decides whether an engineer can trust a production signal. I want to own that investigation path end to end—filters, evidence, failure states—and partner tightly with Product and Customer Success the way I did on WalletGyde’s summary drill-down.",
+      "anchorPointIds": ["walletgyde-dashboard"]
+    },
+    {
+      "id": "ai-workflow",
+      "question": "How are you incorporating AI into your current workflow?",
+      "category": "general-modern",
+      "targetSeconds": 60,
+      "answer": "I use Cursor and Claude to draft tests, explore layout alternatives, and summarize unfamiliar APIs, then I keep product decisions and final review human-owned. On WalletGyde I noted assistant-assisted test drafts in the PR so teammates knew what to re-check. I do not put model output straight into production paths without review.",
+      "anchorPointIds": ["walletgyde-dashboard"]
+    },
+    {
+      "id": "ask-for-help",
+      "question": "When do you ask teammates for suggestions, and how do you communicate when you made a mistake?",
+      "category": "general",
+      "targetSeconds": 60,
+      "answer": "I ask early when the decision is hard to reverse—information architecture, empty states, or measurement definitions—usually in a short design or Product sync with a concrete example. If I ship a mistake, I say what broke, who is affected, the fix, and the prevention in the same thread or standup so Support and Product are not surprised.",
+      "anchorPointIds": ["walletgyde-dashboard"]
+    },
+    {
+      "id": "conflict-or-disagreement",
+      "question": "Tell me about a time you disagreed with a teammate or stakeholder.",
+      "category": "star",
+      "targetSeconds": 90,
+      "answer": "Product wanted more summary cards above the fold; I argued we should protect the path to transaction evidence on mobile. We tested both on a seeded account, kept the hierarchy, and moved secondary cards below so users could still verify a surprising total.",
+      "anchorPointIds": ["walletgyde-dashboard"],
+      "ctar": {
+        "context": "WalletGyde mobile summary was getting crowded with KPI cards.",
+        "task": "Keep the investigation path usable without ignoring Product’s KPI goals.",
+        "action": "Brought a side-by-side prototype to UX/Product with a real long-label month and walked the verify-the-total task.",
+        "result": "We kept summary-to-source hierarchy and relocated secondary KPIs; task completion stayed intact on 375px."
+      }
+    },
+    {
+      "id": "failure",
+      "question": "Tell me about a time something went wrong and how you handled it.",
+      "category": "star",
+      "targetSeconds": 90,
+      "answer": "A stale summary response arrived after a newer month filter and briefly showed the wrong total. I separated summary and detail request lifetimes, preserved the last valid route context, and added checks for stale, empty, and partial-failure states before calling it done.",
+      "anchorPointIds": ["walletgyde-dashboard"],
+      "ctar": {
+        "context": "Users could change month filters faster than summary responses returned.",
+        "task": "Stop wrong-period totals from rendering and recover cleanly.",
+        "action": "Made request generations independent, ignored stale payloads, and documented the failure cases with Support.",
+        "result": "Wrong-period flashes stopped in walkthroughs; empty and partial failures showed explicit retry states."
+      }
+    },
+    {
+      "id": "impactful-project",
+      "question": "Tell me about a project you are proud of.",
+      "category": "star",
+      "targetSeconds": 90,
+      "answer": "I am proud of WalletGyde’s responsive summary-to-transaction workflow: one period context from phone to desktop, typed UI states, and a clear path from a surprising total to source rows that Support no longer had to explain.",
+      "anchorPointIds": ["walletgyde-dashboard"],
+      "ctar": {
+        "context": "Users saw dense financial summaries they could not verify on smaller screens.",
+        "task": "Design and ship an investigation workflow across responsive breakpoints.",
+        "action": "Partnered with Product/UX, modeled loading and failure states, and wired router-preserved context to transaction evidence.",
+        "result": "Users could finish the investigation without tool-switching; the pattern transfers to evidence-heavy product UIs like Instrumental."
+      }
+    },
+    {
+      "id": "ambiguous-problem",
+      "question": "Tell me about a time you had to solve an ambiguous problem.",
+      "category": "star",
+      "targetSeconds": 90,
+      "answer": "It was unclear whether ‘verify the month’ meant trusting the summary card or auditing transactions. I redefined the job as a single investigation path, prototyped with UX, and locked acceptance around completing that path without losing period context.",
+      "anchorPointIds": ["walletgyde-dashboard"],
+      "ctar": {
+        "context": "Stakeholders described the dashboard goal in conflicting ways—glanceable KPIs versus auditability.",
+        "task": "Turn the ambiguity into a shippable user job.",
+        "action": "Wrote the job story, walked real accounts with Product/UX/Support, and made summary-to-source the acceptance path.",
+        "result": "The team aligned on one workflow and shipped coherent empty, stale, and detail-failure states."
+      }
+    }
   ],
   "evaluation": {
     "status": "needs-review",
     "checks": [
       { "id": "structure", "status": "pass", "detail": "Required role, landscape, point, answer, and evaluation fields are present." },
+      { "id": "architecture", "status": "pass", "detail": "Client, APIs, datastore, and request flow are named for the point." },
       { "id": "version-era-fit", "status": "pass", "detail": "Named React 18 / TypeScript 5.x versions fit the 2024–2025 window." },
       { "id": "collaboration", "status": "pass", "detail": "Product, UX, and Support interactions are named." },
       { "id": "ai-tooling-norm", "status": "pass", "detail": "Cursor and Claude are mentioned lightly for a 2024+ window." },
+      { "id": "general-bank-coverage", "status": "pass", "detail": "All required general-question bank ids are present." },
+      { "id": "intro-length", "status": "pass", "detail": "Intro is a ~60s standard spoken shape." },
       { "id": "candidate-confirmation", "status": "review", "detail": "Confirm the measurement evidence and final wording before rehearsal." }
     ]
   }

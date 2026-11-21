@@ -9,9 +9,9 @@ This repository is the source of truth for the workflow; an adapter is the thin 
 3. Produce an ordered point index (`02-point-index.json`). Keep the original wording unchanged in `originalPoint`.
 4. **For each point in order**:
    - Load `roleSummary`, `techLandscape`, the current card, and all previously written expanded points as `priorPoints`.
-   - Run `prompts/expand-point.md` → write `03-points/<id>.json` with versions, collaboration, and AI tooling when applicable.
+   - Run `prompts/expand-point.md` → write `03-points/<id>.json` with versions, architecture (components + request flow), collaboration, and AI tooling when applicable.
    - Continue to the next point automatically.
-5. After all points exist, run `prompts/generate-answer.md` once for the general answer set (`04-answers.json`).
+5. After all points exist, run `prompts/generate-answer.md` against `evals/general-questions.json` for the full general/STAR bank (`04-answers.json`), including a ~60s intro and distinct modern general answers.
 6. Run `prompts/review-answer.md`, repair only failed fields, assemble `06-preparation.json` (include `techLandscape`), then validate.
 
 Default Cursor behavior: the `resume-story` skill runs this loop without waiting for a human "next" between points. Checkpoint files are the handoff mechanism.
