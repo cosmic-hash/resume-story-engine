@@ -12,3 +12,5 @@ General answers are **spoken rehearsal answers only**. Do **not** invent archite
 4. Use only expanded point IDs as anchors. Name user, workflow, ownership, mechanism, result, and impact where the question needs a story.
 5. For `ai-workflow`, describe real coding-assistant / AI product use for 2024+ windows; if the résumé is earlier, say so briefly and honestly.
 6. Keep answers conversational and rehearsal-ready. Target the `targetSeconds` as a length guide (~130–150 spoken words per 60 seconds).
+7. **Abbreviations:** on first mention in an answer, use full phrase then short form in parentheses (e.g. Single-Page Application (SPA)). Later mentions in the same answer may use the short form.
+8. **Numbers:** if you state a figure, it must already exist on an expanded point’s `measurements[]` with before, after, calculation, scope, and evidence (`prompts/measurements.md`). Do not invent new percents in the spoken answer.

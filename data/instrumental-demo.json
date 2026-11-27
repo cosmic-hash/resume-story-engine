@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "roleSummary": {
     "company": "Instrumental",
     "role": "Front End Product Engineer",
@@ -137,8 +137,55 @@
           "Backend returns source rows; UI keeps period context via router state"
         ],
         "aiPlacement": "No product AI in the request path. Cursor/Claude assisted test and layout exploration during development only.",
-        "diagramNotes": "SPA → fetch wrapper → summary/transactions APIs → datastore; router preserves return context."
+        "diagramNotes": "SPA → fetch wrapper → summary/transactions APIs → datastore; router preserves return context.",
+        "mermaid": "flowchart LR\n  U[\"Account Owner (375px to Desktop)\"] --> APP[\"React 18 SPA + React Router 6\"]\n  APP -->|\"Period & category filter\"| FETCH[\"Typed fetch Wrapper (Abort + Generation Guard)\"]\n  FETCH -->|\"GET /summary\"| SUM[\"Summary API\"]\n  FETCH -->|\"GET /transactions\"| TXN[\"Transactions API\"]\n  SUM --> DB[(\"Financial Datastore\")]\n  TXN --> DB\n  TXN -.->|\"Source rows + preserved route state\"| APP"
       },
+      "toolDecisions": [
+        {
+          "tool": "React 18 + TypeScript 5 + React Router 6",
+          "selectionType": "existing-stack-continuity",
+          "whyChosen": "Already standardized across the web product team, giving strong typed UI-state unions and URL-driven route state without introducing a new frontend framework.",
+          "alternativesConsidered": [
+            { "name": "Next.js App Router", "whyNot": "Server-component migration was unnecessary for an authenticated single-page application (SPA) backed by existing REST APIs." },
+            { "name": "Redux Toolkit for route/filter state", "whyNot": "URL query parameters and router state gave free deep-linking, browser back-button preservation, and far less client boilerplate." }
+          ]
+        },
+        {
+          "tool": "Thin typed fetch wrapper with AbortController + generation counter",
+          "selectionType": "technical-tradeoff",
+          "whyChosen": "Solved rapid month-filter race conditions deterministically with zero extra runtime dependency overhead while keeping stale/empty/error states explicit.",
+          "alternativesConsidered": [
+            { "name": "Unmanaged inline fetch calls", "whyNot": "Slower responses from an earlier month could overwrite newer totals on screen." },
+            { "name": "Full client-side state/cache framework", "whyNot": "Overkill for two read endpoints when explicit generation guards and AbortController already covered cancellation and retry." }
+          ]
+        }
+      ],
+      "businessTerms": [
+        {
+          "term": "Summary-to-Source Drill-Down",
+          "definition": "Moving from an aggregated high-level metric directly to the underlying itemized evidence records while keeping the same filter scope.",
+          "howWeSolvedIt": "Anchored every category card to the active account and month in React Router so clicking through opens the exact matching ledger transactions and navigating back restores the exact view."
+        },
+        {
+          "term": "Partial Failure Isolation",
+          "definition": "Keeping unaffected regions of an investigation page usable when one downstream API fails instead of replacing the entire screen with a fatal error.",
+          "howWeSolvedIt": "Modeled summary and transaction detail requests as independent discriminated TypeScript state unions with inline retry controls."
+        }
+      ],
+      "challenges": [
+        {
+          "challenge": "Rapid month filter switching occasionally flashed totals from an older month after a newer month was already selected.",
+          "rootCause": "In-flight HTTP responses resolved out of order and wrote into shared React state without checking whether the request still matched the active period.",
+          "howWeSolvedIt": "Added AbortController cancellation plus a monotonic request-generation guard inside the typed fetch wrapper so out-of-date payloads are silently dropped.",
+          "outcome": "Eliminated wrong-period flashes during rapid switching and locked the behavior in React Testing Library regression tests."
+        },
+        {
+          "challenge": "Long category labels and dense KPI cards pushed transaction evidence below the fold on 375px mobile screens.",
+          "rootCause": "Desktop-first grid layout prioritized secondary summary tiles over the primary summary-to-source investigation path.",
+          "howWeSolvedIt": "Walked seeded real-label prototypes with Product and UX, reordered the hierarchy to keep period control and primary totals first, and moved secondary KPIs below.",
+          "outcome": "Maintained clean single-column task completion from 375px mobile through desktop with full keyboard traversal."
+        }
+      ],
       "jdAlignment": {
         "matchSummary": "Maps WalletGyde’s summary-to-source investigation UI onto Instrumental’s evidence-first manufacturing workflows and Product partnership expectations.",
         "hooks": [
@@ -182,6 +229,24 @@
       "prevention": "Add browser checks for filter changes, back navigation, loading, empty, stale, and partial-failure states.",
       "roleConnection": "Instrumental users similarly move from a filtered population to unit-level image, measurement, and test evidence.",
       "interviewerQuestions": ["How did you preserve route state?", "What did each technology own?", "How did Product and UX change the hierarchy?", "How would this pattern apply to a serialized-unit investigation?"],
+      "interviewerQA": [
+        {
+          "question": "How did you preserve route state?",
+          "answer": "I encoded the active account, month, and selected category in React Router URL parameters and route state rather than ephemeral local component state. That meant browser back navigation, refreshes, and deep links always restored the exact investigation scope without resetting filters."
+        },
+        {
+          "question": "What did each technology own?",
+          "answer": "React 18 owned the view composition, TypeScript 5 owned discriminated loading/stale/empty/error state unions, React Router 6 owned URL filter and return context, SCSS modules owned scoped responsive breakpoints, Vite 5 owned local dev and builds, the fetch wrapper owned abort and stale-response guarding, and React Testing Library locked failure states in tests."
+        },
+        {
+          "question": "How did Product and UX change the hierarchy?",
+          "answer": "During a design critique with real long category labels on a 375px viewport, we saw extra KPI tiles pushing the drill-down path off screen. Together with Product and UX, we prioritized the period selector, primary summary total, and category drill-down first, and relocated secondary KPIs below."
+        },
+        {
+          "question": "How would this pattern apply to a serialized-unit investigation?",
+          "answer": "It is the exact same investigation loop: filter a population, inspect an aggregate anomaly, drill into unit-level images, measurements, and functional tests, handle partial failures cleanly without losing the population filter, and navigate back to compare the next unit."
+        }
+      ],
       "fullStory": "WalletGyde users needed to investigate a financial summary rather than merely view a number. Working with Product and UX, I designed the responsive hierarchy, modeled the states, preserved the selected context, and connected summary data to source transactions. In 2024–2025 I also used Cursor and Claude to accelerate test and layout exploration, then reviewed those diffs with the team. The result was a traceable, accessible workflow. The transferable Instrumental pattern is an evidence-first investigation interface where filters, loading states, detail views, partner feedback, and source context remain correct.",
       "status": "needs-review"
     }
@@ -280,10 +345,14 @@
     "status": "needs-review",
     "checks": [
       { "id": "structure", "status": "pass", "detail": "Required role, landscape, point, answer, and evaluation fields are present." },
-      { "id": "architecture", "status": "pass", "detail": "Point-level client, APIs, datastore, and request flow are named." },
+      { "id": "architecture", "status": "pass", "detail": "Point-level client, APIs, datastore, request flow, and valid Mermaid diagram are named." },
       { "id": "jd-match-depth", "status": "pass", "detail": "jdAlignment hooks map to Instrumental workflows, ownership, and evaluation signals." },
       { "id": "adjacent-tech", "status": "pass", "detail": "Vite, Testing Library, and fetch wrapper support the React path." },
       { "id": "version-era-fit", "status": "pass", "detail": "Named React 18 / TypeScript 5.x versions fit the 2024–2025 window." },
+      { "id": "tool-decisions", "status": "pass", "detail": "Tool choices separate existing-stack continuity from technical tradeoffs with concrete rejected alternatives." },
+      { "id": "business-terms", "status": "pass", "detail": "Domain terms are defined in plain language and tied directly to implementation." },
+      { "id": "challenges-depth", "status": "pass", "detail": "Production race-condition and responsive layout challenges include root cause, fix, and outcome." },
+      { "id": "interviewer-qa", "status": "pass", "detail": "All 4 interviewer questions include crisp spoken-ready answers." },
       { "id": "collaboration", "status": "pass", "detail": "Product, UX, and Support interactions are named." },
       { "id": "ai-tooling-norm", "status": "pass", "detail": "Cursor and Claude are mentioned lightly for a 2024+ window." },
       { "id": "general-bank-coverage", "status": "pass", "detail": "All required general-question bank ids are present." },

@@ -7,7 +7,18 @@
     <link rel="stylesheet" href="/dashboard/styles.css" />
   </head>
   <body>
-    <header class="topbar"><div class="brand"><span class="mark">✦</span><span>Resume Story Engine</span></div><span class="status" id="status">Loading preparation</span></header>
+    <header class="topbar">
+      <div class="brand"><span class="mark">✦</span><span>Resume Story Engine</span></div>
+      <div class="topbar-controls">
+        <select id="run-select" class="run-select" aria-label="Select preparation"></select>
+        <div class="download-group" role="group" aria-label="Download preparation data">
+          <button type="button" id="dl-md" class="dl-btn" disabled title="Download complete study guide as Markdown">↓ MD</button>
+          <button type="button" id="dl-html" class="dl-btn" disabled title="Download all stories & Mermaid diagrams as printable HTML">↓ HTML / PDF</button>
+          <button type="button" id="dl-json" class="dl-btn" disabled title="Download full raw preparation JSON">↓ JSON</button>
+        </div>
+        <span class="status" id="status">Loading preparation</span>
+      </div>
+    </header>
     <main id="app" class="shell"></main>
     <script type="module" src="/dashboard/app.js"></script>
   </body>

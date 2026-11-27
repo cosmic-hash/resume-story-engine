@@ -1,80 +1,85 @@
 # Resume Story Engine
 
-Resume Story Engine is a portable preparation workflow for turning a résumé and job description into specific, evidence-backed interview stories. It is designed to work with different language models while keeping the rules, output shape, quality checks, and dashboard contract in source control.
+Resume Story Engine is a portable, file-backed preparation workflow and interactive dashboard for turning any résumé and job description into specific, evidence-backed interview stories. It works with any language model while keeping schemas, prompts, quality checks, assembly/validation scripts, and the dashboard contract in source control — and keeping all personal runs private under gitignored `data/private/`.
 
 ## What this repository contains
 
 ```text
-spec/                 Required output shapes and field definitions
-prompts/              Small stage-specific prompts for any LLM adapter
-examples/             Layout notes and expected detail level
-evals/                Quality checks and test cases
-data/                 Safe demo output; keep personal runs private
-dashboard/            Read-only browser dashboard for preparation JSON
-scripts/              Validation and local preview helpers
-.cursor/skills/       Cursor skill that runs the staged pipeline
-AGENTS.md             Short always-on agent gates for this repo
+spec/                 Required JSON schemas and field definitions
+prompts/              Stage-specific prompts (including measurements & coach prompt)
+examples/             Run folder layout notes
+evals/                General-question bank and quality checks
+data/                 Committed synthetic demo; personal runs stay in gitignored data/private/
+dashboard/            Multi-run interactive dashboard (Mermaid flows, clickable Q&A, downloads)
+scripts/              Assemble, validate, and local dashboard server scripts
+.cursor/skills/       Agent skill that runs and incrementally updates the staged pipeline
+AGENTS.md             Always-on agent guardrails for this repo
 ```
 
 ## The pipeline
 
 ```text
-Résumé + job description
+Résumé + job description  (data/private/<run-slug>/00-inputs/)
         ↓
-Compact role summary
+Compact role summary      (01-role-summary.json)
         ↓
-Tech / domain landscape research (web)
-  versions · gaps · architectures · Product/UX norms · 2024+ AI tools · timeline checks
+Tech / domain landscape   (01b-tech-landscape.json — live web research)
+  exact versions · tool tradeoffs · gaps · architectures · Product/UX norms · 2024+ AI tools · timeline checks
         ↓
-Point index (all bullets, compact)
+Point index               (02-point-index.json — all bullets verbatim)
         ↓
-For each point in order (automated):
-   deep JD match → adjacent tech + point architecture + collab → write file
+For each point in order   (03-points/<id>.json — sequential, anti-repeat)
+  deep JD match · exact versions · toolDecisions · Mermaid architecture · businessTerms · challenges · measurements · interviewerQA
         ↓
-Generate general + STAR bank answers (~60s intro; modern AI / teamwork questions; no architecture blocks)
+General & STAR answers    (04-answers.json)
         ↓
-Review, assemble preparation JSON, validate
+Review, assemble & study guide  (05-review.json → node scripts/assemble.mjs <run-slug> → 06-preparation.json + 07-study-guide.md)
         ↓
-Optional: clear intermediate checkpoints
+Interview coach prompt & round guides  (08-interview-coach-prompt.md + optional 09-*.md / *.html in the same run folder)
         ↓
-Render the preparation dashboard
+Shared interactive dashboard    (npm run dashboard → http://localhost:4173/dashboard/?run=<run-slug>)
 ```
 
-Points are expanded **sequentially**. Each new point receives the landscape brief and prior stories so the same company prep stays specific, timeline-plausible, and non-repetitive. Checkpoint files under `data/private/<run-slug>/` are the handoff between stages — see `examples/run-layout.md`.
+## Quick start (any résumé + job description)
 
-## Using Cursor (default runner)
+1. Run `/resume-story` (or ask your agent to follow `.cursor/skills/resume-story/SKILL.md`) with a résumé and job description.
+2. All outputs land inside `data/private/<run-slug>/` (gitignored).
+3. Whenever you add more real project context or round-specific prep later, update the files inside that **same** `data/private/<run-slug>/` folder and run:
 
-1. Open this repo in Cursor.
-2. In Agent chat, run `/resume-story` (or ask to prepare interview stories) and paste the résumé + job description.
-3. The skill writes stage files automatically and continues point-by-point without waiting for "next".
-4. When finished, open `data/private/<run-slug>/06-preparation.json`.
-5. Say `clear` to delete intermediates and keep inputs + final JSON.
+```bash
+node scripts/assemble.mjs <run-slug>
+```
 
-Point-level rewrite/edit is planned next; this pass focuses on full generate.
-
-## Using another LLM
-
-An agent adapter should load `spec/`, the relevant prompt in `prompts/`, and one or more examples from `examples/`. It then supplies the résumé, job description, and company context as tagged inputs and asks for JSON matching the preparation schema. The model is not expected to remember this repository; the adapter explicitly loads the versioned rules.
-
-Use structured output or JSON schema enforcement when the provider supports it. After generation, run `npm run validate` and the quality checks before storing the result. If a record is incomplete, send only the failed fields back for repair instead of regenerating the entire preparation.
-
-## Dashboard
-
-The dashboard is provider-independent. It renders `data/instrumental-demo.json`, and the same shape can be replaced with any generated preparation:
+4. Launch the shared dashboard:
 
 ```bash
 npm run dashboard
-# open http://localhost:4173/dashboard/
+# opens http://localhost:4173/dashboard/ (auto-selects newest run + top-bar run switcher)
 ```
 
-## Validation
+## Dashboard features
+
+The dashboard is completely generic and automatically discovers every `data/private/<run-slug>/06-preparation.json` (plus the committed synthetic demo `data/instrumental-demo.json`):
+
+- **Top-bar run switcher** to move between all local runs (`?run=<run-slug>`).
+- **Live Mermaid architecture diagrams** rendered directly inside each résumé point.
+- **Exact technology versions**, **Tool Decisions** (*Existing Stack Continuity* vs. *Technical Tradeoff*), **Business & Domain Terms**, **Challenges & Solutions**, **Measurements**, and **clickable Follow-Up Q&A cards**.
+- **Per-run companion docs panel** automatically listing any extra `.md` / `.html` guides saved in `data/private/<run-slug>/` (study guide, coach prompt, round question banks, HTML sheets).
+- **One-click downloads** right from the header: **`↓ MD`** (complete Markdown study guide), **`↓ HTML / PDF`** (all stories expanded + rendered Mermaid + Print/Save PDF), and **`↓ JSON`** (raw structured preparation).
+
+## Validation & assembly
 
 ```bash
+# Validate the committed synthetic demo
 npm run validate
-```
 
-The validator checks required fields, point identifiers, measurement fields, answer structure, and the final quality checklist. It does not claim that a number is factually true; evidence still needs to be reviewed by the candidate.
+# Validate any private run directly
+node scripts/validate.mjs data/private/<run-slug>/06-preparation.json
+
+# Assemble 06-preparation.json + 07-study-guide.md and validate a private run
+node scripts/assemble.mjs <run-slug>
+```
 
 ## Privacy
 
-Keep personal résumés, job descriptions, notes, API keys, and generated private answers outside the public repository or under ignored paths. The committed demo is synthetic and contains no personal source documents.
+`data/private/` is ignored in `.gitignore`. Personal résumés, job descriptions, private runs, company-specific notes, and API keys must never be committed to source control. The committed `data/instrumental-demo.json` is purely synthetic.

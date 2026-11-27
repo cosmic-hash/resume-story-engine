@@ -12,3 +12,5 @@ Given the job description, résumé (for date windows and named tools), and role
 6. **AI-assisted work (from 2024 onward)**: Claude, Cursor, Copilot, and similar — norms and mention guidance. Do not force into pre-2024 stories.
 
 Use web search or equivalent live sources when available. Record short source hints. If a fact cannot be verified, mark uncertainty rather than inventing a precise version.
+
+In narrative notes (`purpose`, `whyNeeded`, `researchNotes`), expand uncommon short forms on first mention as `Full Phrase (SHORT)` — e.g. Single-Page Application (SPA).

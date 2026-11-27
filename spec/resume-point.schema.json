@@ -45,7 +45,7 @@
     },
     "architecture": {
       "type": "object",
-      "required": ["summary", "components", "requestFlow"],
+      "required": ["summary", "components", "requestFlow", "mermaid"],
       "properties": {
         "summary": { "type": "string", "minLength": 10 },
         "components": {
@@ -62,6 +62,7 @@
           }
         },
         "requestFlow": { "type": "array", "minItems": 2, "items": { "type": "string", "minLength": 5 } },
+        "mermaid": { "type": "string", "minLength": 15, "description": "Valid Mermaid diagram (flowchart LR/TD or sequenceDiagram) with quoted labels depicting the setup and request flow." },
         "aiPlacement": { "type": "string" },
         "diagramNotes": { "type": "string" }
       }
@@ -78,6 +79,59 @@
           "version": { "type": "string", "minLength": 1 },
           "eraFit": { "enum": ["plausible", "stretch", "anachronistic"] },
           "eraNote": { "type": "string" }
+        }
+      }
+    },
+    "toolDecisions": {
+      "type": "array",
+      "description": "Why each key tool was chosen and why alternatives were not chosen, including honest existing-stack continuity where relevant.",
+      "items": {
+        "type": "object",
+        "required": ["tool", "whyChosen", "alternativesConsidered"],
+        "properties": {
+          "tool": { "type": "string" },
+          "version": { "type": "string" },
+          "selectionType": { "enum": ["technical-tradeoff", "existing-stack-continuity", "hybrid"] },
+          "whyChosen": { "type": "string", "minLength": 10 },
+          "alternativesConsidered": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["name", "whyNot"],
+              "properties": {
+                "name": { "type": "string" },
+                "whyNot": { "type": "string", "minLength": 10 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "businessTerms": {
+      "type": "array",
+      "description": "Relevant domain and business concepts for this story and how the candidate solved them.",
+      "items": {
+        "type": "object",
+        "required": ["term", "definition", "howWeSolvedIt"],
+        "properties": {
+          "term": { "type": "string" },
+          "definition": { "type": "string", "minLength": 10 },
+          "howWeSolvedIt": { "type": "string", "minLength": 10 }
+        }
+      }
+    },
+    "challenges": {
+      "type": "array",
+      "description": "Concrete technical, data, scale, or product challenges faced and how they were solved.",
+      "items": {
+        "type": "object",
+        "required": ["challenge", "rootCause", "howWeSolvedIt", "outcome"],
+        "properties": {
+          "challenge": { "type": "string", "minLength": 10 },
+          "rootCause": { "type": "string", "minLength": 10 },
+          "howWeSolvedIt": { "type": "string", "minLength": 10 },
+          "outcome": { "type": "string", "minLength": 10 }
         }
       }
     },
@@ -100,13 +154,40 @@
       }
     },
     "domainPatternHooks": { "type": "array", "items": { "type": "string" } },
-    "measurements": { "type": "array", "items": { "type": "object", "required": ["metric", "before", "after", "calculation", "scope", "evidence"], "properties": { "metric": { "type": "string" }, "before": { "type": "string" }, "after": { "type": "string" }, "calculation": { "type": "string" }, "scope": { "type": "string" }, "evidence": { "type": "string" } } } },
+    "measurements": {
+      "type": "array",
+      "description": "Required whenever a numeric claim appears. See prompts/measurements.md.",
+      "items": {
+        "type": "object",
+        "required": ["metric", "before", "after", "calculation", "scope", "evidence"],
+        "properties": {
+          "metric": { "type": "string", "description": "Name of what was measured." },
+          "before": { "type": "string", "description": "Starting number or state before the change, with units." },
+          "after": { "type": "string", "description": "Improved number or state after the change, same convention as before." },
+          "calculation": { "type": "string", "description": "Formula or method that produces the claimed improvement." },
+          "scope": { "type": "string", "description": "Dataset, endpoint, window, environment included in the measurement." },
+          "evidence": { "type": "string", "description": "Where the candidate would prove the figure (dashboard, log, PR, recording)." }
+        }
+      }
+    },
     "evidence": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 10 } },
     "failureCases": { "type": "array", "items": { "type": "string" } },
     "remedy": { "type": "string" },
     "prevention": { "type": "string" },
     "roleConnection": { "type": "string", "minLength": 10 },
     "interviewerQuestions": { "type": "array", "items": { "type": "string" } },
+    "interviewerQA": {
+      "type": "array",
+      "description": "Likely follow-up questions paired with concise, spoken-ready answers rendered as expandable Q&A cards in the dashboard.",
+      "items": {
+        "type": "object",
+        "required": ["question", "answer"],
+        "properties": {
+          "question": { "type": "string", "minLength": 5 },
+          "answer": { "type": "string", "minLength": 20 }
+        }
+      }
+    },
     "fullStory": { "type": "string", "minLength": 50 },
     "status": { "enum": ["draft", "needs-review", "shortlisted", "finalized"] }
   }

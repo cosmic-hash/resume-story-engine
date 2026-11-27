@@ -4,7 +4,12 @@ Evaluate the answer (and linked points) against the role summary and tech landsc
 
 For **résumé points**, check deep JD match (`jdAlignment` hooks are specific, not generic), architecture clarity on the point (components + request flow — never required on general answers), adjacent supporting tech when the path needs it, product/user/workflow specificity, ownership, version/era realism, collaboration, impact, measurement math, evidence, failure handling, and role alignment.
 
-For **general answers**, check bank coverage (~60s intro, distinct modern generals), natural delivery, and unsupported claims — not architecture diagrams.
+Also check:
+
+- **Abbreviations:** first mention of SPA, API, RTL, OTel, and similar short forms expands to full phrase (Short Form) — see expand-point writing rules.
+- **Measurements:** any numeric claim has `before`, `after`, `calculation`, `scope`, and `evidence` filled honestly (`prompts/measurements.md`). Fail `measurement` if a percent or count appears without that breakdown.
+
+For **general answers**, check bank coverage (~60s intro, distinct modern generals), natural delivery, unsupported claims, first-mention abbreviations, and that spoken numbers match point measurements — not architecture diagrams.
 
 When the experience window is 2024+, check AI-assisted workflow is mentioned naturally or honestly omitted.
 
