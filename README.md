@@ -12,7 +12,7 @@ evals/                General-question bank and quality checks
 data/                 Committed synthetic demo; personal runs stay in gitignored data/private/
 dashboard/            Multi-run interactive dashboard (Mermaid flows, clickable Q&A, downloads)
 scripts/              Assemble, validate, and local dashboard server scripts
-.cursor/skills/       Agent skill that runs and incrementally updates the staged pipeline
+.agents/skills/       Agent skill that runs and incrementally updates the staged pipeline
 AGENTS.md             Always-on agent guardrails for this repo
 ```
 
@@ -42,7 +42,7 @@ Shared interactive dashboard    (npm run dashboard → http://localhost:4173/das
 
 ## Quick start (any résumé + job description)
 
-1. Run `/resume-story` (or ask your agent to follow `.cursor/skills/resume-story/SKILL.md`) with a résumé and job description.
+1. Run `/resume-story` (or ask your agent to follow `.agents/skills/resume-story/SKILL.md`) with a résumé and job description.
 2. All outputs land inside `data/private/<run-slug>/` (gitignored).
 3. Whenever you add more real project context or round-specific prep later, update the files inside that **same** `data/private/<run-slug>/` folder and run:
 

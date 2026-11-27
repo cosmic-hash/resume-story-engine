@@ -4,7 +4,7 @@
 
 When generating or updating interview preparation from a résumé and job description in this repo:
 
-1. Prefer the project skill `resume-story` (invoke `/resume-story` or follow `.cursor/skills/resume-story/SKILL.md`).
+1. Prefer the project skill `resume-story` (invoke `/resume-story` or follow `.agents/skills/resume-story/SKILL.md`).
 2. Write all checkpoint files, assembled JSON, study guide, coach prompt, and any round-specific guides inside the **same `data/private/<run-slug>/` folder** — do not produce only a chat-wall final answer.
 3. After role extraction, research `01b-tech-landscape.json` with live sources before expanding points (exact release versions by era, tool tradeoffs/alternatives, architectures, Product/UX norms, post-2024 AI coding tools, timeline checks).
 4. Run stages automatically without waiting for the user to say "next".
